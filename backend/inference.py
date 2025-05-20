@@ -12,11 +12,34 @@ import torch.nn.functional as F
 SAVE_DIR = './assets/for_app_predicted_masked'
 
 
-with open("./assets/split_paths.pkl", "rb") as f:
-        train_imgs, val_imgs, train_masks, val_masks = pickle.load(f)
+# with open("./assets/split_paths.pkl", "rb") as f:
+#         train_imgs, val_imgs, train_masks, val_masks = pickle.load(f)
+
+def single_image_segment(image_pth, img_res):
+    model_pth = '../saved/unet.pth'
+    device =  "cuda" if torch.cuda.is_available() else "cpu"
+
+    model = UNet(in_channels=3, num_classes=1).to(device)
+    model.load_state_dict(torch.load(model_pth, map_location=device))
+    model.eval()
+
+    transform = transforms.Compose([
+        transforms.Resize(img_res),
+        transforms.ToTensor()
+    ])
+    img = transform(Image.open(image_pth).convert("RGB")).unsqueeze(0).to(device)
+
+    with torch.no_grad():
+        pred_mask = model(img)
+
+    pred_mask = torch.sigmoid(pred_mask)  
+    pred_mask = (pred_mask > 0.5).float() 
+
+    return pred_mask
 
 
 def single_image_inference(image_pth, model_pth, img_res, device):
+    
 
     model = UNet(in_channels=3, num_classes=1).to(device)
     model.load_state_dict(torch.load(model_pth, map_location=device))
@@ -73,7 +96,7 @@ def single_image_inference(image_pth, model_pth, img_res, device):
 if __name__ == "__main__":
     SINGLE_IMG_PATH = "./assets/for_app_original/ave-0035-0014.jpg"
     MODEL_PATH = "./saved/unet.pth"
-    IMG_RES = (256, 256)
+    IMG_RES = (512, 896)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     single_image_inference(SINGLE_IMG_PATH, MODEL_PATH, IMG_RES, device)

@@ -33,13 +33,18 @@ if __name__ == "__main__":
         train_imgs, val_imgs, train_masks, val_masks = pickle.load(f)
 
     LEARNING_RATE = 3e-4
-    BATCH_SIZE = 20
+    BATCH_SIZE = 5
     EPOCHS = 50
     MODEL_SAVE_PATH = "./saved/unet.pth"
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    # original size 1920x1088 (1088, 1920) 
-    train_dataset = CropWeedDataset(train_imgs, train_masks)
-    val_dataset = CropWeedDataset(val_imgs, val_masks)
+   
+    # original size 1920x1088 (1088, 1920) # 640 × 1130 masih serasio 
+    # tapi unet sizenya harus kelipatan 16 jadi bisanya 640 x 1120 
+    # 512 x 896 / 912 g sempet kekny
+    # 
+
+    train_dataset = CropWeedDataset(train_imgs, train_masks, (512, 896) )
+    val_dataset = CropWeedDataset(val_imgs, val_masks, (512, 896) )
 
     train_dataloader = DataLoader(dataset=train_dataset,
                                 batch_size=BATCH_SIZE,
@@ -74,7 +79,6 @@ if __name__ == "__main__":
         train_dice_total = 0
         train_acc_total = 0
         
-
         # training
         for idx, img_mask in enumerate(tqdm(train_dataloader)):
             img = img_mask[0].float().to(device)
