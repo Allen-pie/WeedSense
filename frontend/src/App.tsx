@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import { Toaster } from "sonner";
-import { CheckCircle } from "lucide-react";
 
 function App() {
   return (

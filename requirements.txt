@@ -1,9 +1,0 @@
-torch==2.7.0+cu118
-torchvision==0.22.0+cu118
-Pillow==9.5.0
-scikit-learn==1.6.1
-matplotlib==3.5.3
-tqdm==4.67.1
-numpy==1.25.2
-flask
-flask-cors

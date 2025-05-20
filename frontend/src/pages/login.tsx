@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Lock, Eye, EyeOff, ArrowRight ,  AlertTriangle, Loader2 } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight , Loader2 } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { supabase } from "../../supabase/supabase.ts";
-import ErrorToaster from "@/custom_components/error-toaster.tsx";
 import showErrorToaster from "@/custom_components/error-toaster.tsx";
 import showSuccessToaster from "@/custom_components/success-toaster.tsx";
 

@@ -287,9 +287,10 @@ export default function Home() {
                 ) : segmentedImage ? (
                   <div className="">
                     <img
-                      src={segmentedImage || "/placeholder.svg"}
-                      alt="Original image"
-                      className=" max-w-full object-contain p-4"
+                      key={segmentedImage}
+                      src={segmentedImage}
+                      alt="Segmentation Result"
+                      className="max-w-full object-contain p-4"
                     />
                   </div>
                 ) : (
