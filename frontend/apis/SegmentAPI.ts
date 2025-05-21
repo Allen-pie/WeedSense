@@ -13,6 +13,7 @@ const SegmentAPI = {
             }
         })
     }
+
 }
 
 export default SegmentAPI;

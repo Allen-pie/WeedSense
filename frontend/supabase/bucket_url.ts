@@ -1,0 +1,1 @@
+export const PUBLIC_URL = 'https://ubugnokssebucfdiwuan.supabase.co/storage/v1/object/public/';

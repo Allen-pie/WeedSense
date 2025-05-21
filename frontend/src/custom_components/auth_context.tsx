@@ -2,14 +2,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { type Session, type User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 import {supabase} from "../../supabase/supabase.ts";
-
 interface AuthContextType {
     user : User | null;
     session : Session | null;
     loading : boolean;
     signOut : () => Promise<void>;
 }
-
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -26,11 +24,9 @@ export const AuthProvider = ({children} : {children : React.ReactNode}) => {
             if (data.session){
                 setUser(data.session.user);
                 setSession(data.session);
-
-                console.log('session', session);
             }
             else{
-                console.log('errorw', error);
+                console.error('error', error);
             }
 
             isLoading(false);

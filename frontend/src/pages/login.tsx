@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Lock, Eye, EyeOff, ArrowRight ,  AlertTriangle, Loader2 } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight , Loader2 } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { supabase } from "../../supabase/supabase.ts";
-import ErrorToaster from "@/custom_components/error-toaster.tsx";
 import showErrorToaster from "@/custom_components/error-toaster.tsx";
 import showSuccessToaster from "@/custom_components/success-toaster.tsx";
 
@@ -96,9 +95,9 @@ export default function Login() {
                   </div>
                 </div> */}
 
-                <h1 className="text-2xl font-bold text-foreground">Login to</h1>
+                <h1 className="text-2xl font-bold text-foreground">Login</h1>
 
-                {/* <p className="text-gray-400 mt-2">Sign in to your account</p> */}
+                <p className="text-gray-400 mt-2">Sign in to your account</p>
               </div>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -127,12 +126,12 @@ export default function Login() {
                     <Label htmlFor="password" className="text-foreground">
                       Password
                     </Label>
-                    <a
+                    {/* <a
                       href="/forgot-password"
                       className="text-sm text-green-400 hover:text-green-300"
                     >
                       Forgot password?
-                    </a>
+                    </a> */}
                   </div>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
@@ -166,7 +165,7 @@ export default function Login() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2 cursor-pointer"
                   disabled={isLoading}
                 >
                   {isLoading ? (
