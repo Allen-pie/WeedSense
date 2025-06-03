@@ -13,7 +13,8 @@ import { supabase } from "../../supabase/supabase.ts";
 import { PUBLIC_URL } from "../../supabase/bucket_url.ts";
 import Hero from "@/custom_components/hero.tsx";
 import { Select } from "@radix-ui/react-select";
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";import { useAuth } from "@/custom_components/auth_context.tsx";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
+import { useAuth } from "@/custom_components/auth_context.tsx";
 import { decode } from "base64-arraybuffer";
 import clsx from "clsx";
 import showErrorToaster from "@/custom_components/error-toaster.tsx";
@@ -198,9 +199,8 @@ export default function Home() {
       setIsProcessing(true);
       const formData = new FormData();
       formData.append('image', selectedImage);
-      formData.append('mode',mode);
-
-      const res = await SegmentAPI.segment(formData);
+  
+      const res = await SegmentAPI.segment(formData, mode);
       const data = res.data as segmentResponse;
 
       setSegmentedImage("data:image/png;base64," + data.result);
@@ -343,7 +343,7 @@ export default function Home() {
               <div className="py-2 px-2 to-background   flex justify-between items-center ">
                 <h2 className="font-semibold ">Original Image</h2>
 
-                <div className="flex gap-2 ">
+                <div className="flex gap-2 items-center">
                   <Button
                     size="sm"
                     onClick={clearImage}
@@ -353,6 +353,7 @@ export default function Home() {
                     <Trash2 className="h-4 w-4 mr-2" />
                     Clear
                   </Button>
+
                   <Select value={mode} onValueChange={setMode}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Select mode" />
@@ -366,7 +367,7 @@ export default function Home() {
                     size="sm"
                     onClick={processImage}
                     disabled={
-                      !selectedImage || isProcessing || segmentedImage != null
+                      !selectedImage || isProcessing 
                     }
                     className="bg-green-500 hover:bg-green-600 text-white cursor-pointer"
                   >
