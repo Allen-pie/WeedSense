@@ -11,7 +11,8 @@ import { DashboardHeader } from "@/custom_components/header";
 import SegmentAPI from '../../apis/SegmentAPI'
 import {supabase} from "../../supabase/supabase.ts";
 import Hero from "@/custom_components/hero.tsx";
-
+import { Select } from "@radix-ui/react-select";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
 
 interface segmentResponse {
   message : string
@@ -23,6 +24,7 @@ export default function Home() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [segmentedImage, setSegmentedImage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [mode,setMode] = useState<string>("binary")
   const navigate = useNavigate();
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -129,6 +131,7 @@ export default function Home() {
       setIsProcessing(true);
       const formData = new FormData();
       formData.append('image', selectedImage);
+      formData.append('mode',mode);
 
       const res = await SegmentAPI.segment(formData) ;
       const data = res.data as segmentResponse;
@@ -211,6 +214,15 @@ export default function Home() {
                     <Trash2 className="h-4 w-4 mr-2" />
                     Clear
                   </Button>
+                  <Select value={mode} onValueChange={setMode}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select mode" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="binary">Binary</SelectItem>
+                      <SelectItem value="multiclass">Multiclass</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <Button
                     size="sm"
                     onClick={processImage}
