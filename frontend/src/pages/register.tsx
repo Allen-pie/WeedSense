@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DashboardHeader } from "@/custom_components/header";
 import Footer from "@/custom_components/footer";
-import { useNavigate } from "react-router-dom";
+import { Route, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { supabase } from "../../supabase/supabase.ts";
 import showErrorToaster from "@/custom_components/error-toaster.tsx";
@@ -63,10 +63,30 @@ export default function Register() {
   const onSubmit = async (value: RegisterData) => {
     try {
       setIsLoading(true);
+
+      const { data: is_email_exists } = await supabase.rpc("email_exists", {
+        input_email: value.email,
+      });
+
+      if (is_email_exists) {
+
+        showSuccessToaster({
+          title: "User already registered",
+          description: 'Redirecting to login..',
+        });
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500)
+
+        return;
+      }
+
       const { data, error: reg_error } = await supabase.auth.signUp({
         email: value.email,
         password: value.password,
       });
+
 
       if (reg_error) {
         showErrorToaster({
