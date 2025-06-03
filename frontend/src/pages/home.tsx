@@ -40,6 +40,7 @@ export default function Home() {
   const [segmentedImage, setSegmentedImage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [isLoadingUserData, setIsLoadingUserData] = useState<boolean>(false);
+  const [mode,setMode] = useState<string>('binary');
 
   const { session, user } = useAuth();
 
