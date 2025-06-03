@@ -1,6 +1,5 @@
 import { Leaf, Github} from "lucide-react"
 import { Separator } from "@/components/ui/separator"
-import { Link } from "react-router-dom"
 
 export default function Footer(){
     return (

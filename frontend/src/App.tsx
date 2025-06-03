@@ -1,31 +1,17 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from "./pages/home";
 import Login from "./pages/login";
-import { Toaster } from "sonner";
+import Register from "./pages/register";
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </div>
-      <Toaster
-        // richColors={true}
-        // toastOptions={{
-        //   style: {
-        //     // background: "background",
-        //   },
-        //   classNames: {
-        //     title: "!text-foreground !bg-transparent  !ml-4",
-        //     description: "!text-foreground !bg-transparent !ml-4",
-        //     icon : ''
-        //   },
-        // }}
-      />
-    </Router>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </div>
   );
 }
 

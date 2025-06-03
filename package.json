@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "base64-arraybuffer": "^1.0.2",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.510.0",
     "react-router-dom": "^7.6.0",
