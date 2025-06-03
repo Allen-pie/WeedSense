@@ -8,6 +8,8 @@ import torch.nn as nn
 import torchvision.transforms.functional as TF
 import numpy as np
 import os
+import segmentation_models_pytorch as smp
+
 
 class UNet(nn.Module):
     def __init__(self, in_channels=3, out_channels=3):
@@ -54,9 +56,23 @@ class UNet(nn.Module):
         return self.final(u1)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = UNet(in_channels=3, out_channels=4).to(device)  
-model.load_state_dict(torch.load("best_model.pt", map_location=device))
+model_binary = UNet(in_channels=3, out_channels=4).to(device)  
+model_binary.load_state_dict(torch.load("best_model.pt", map_location=device))
 
+model_multi = smp.UnetPlusPlus(
+    encoder_name="resnet34",        # resnet for now
+    encoder_weights="imagenet",     # pretrained weightss
+    in_channels=3,
+    classes=3,                      # multi-class 0,1,2
+    activation=None             
+).to(device)
+model_multi.load_state_dict(torch.load("best_model_multi.pth", map_location=device))
+
+class_colors = {
+    0: (0, 0, 0),         # Black for background
+    1: (0, 255, 0),       # Green for crop
+    2: (255, 0, 0)        # Red for weed
+}
 
 app = Flask(__name__)
 CORS(app)
@@ -66,24 +82,41 @@ def segment():
     if 'image' not in request.files:
         return jsonify({"error": "No image uploaded"}), 400
 
+    mode = request.form['mode']
     image_file = request.files['image']
     image = Image.open(image_file.stream).convert("RGB")
 
     transform = TF.to_tensor(image)
-    transform = TF.resize(transform, [256, 256])  
+    if mode == 'binary':
+        transform = TF.resize(transform, [256, 256])  
+    else:
+        transform = TF.resize(transform, [288, 480])  
     transform = TF.normalize(transform, mean=[0.485, 0.456, 0.406],
                                       std=[0.229, 0.224, 0.225])
     input_tensor = transform.unsqueeze(0).to(device) 
-
     # Inference
+
+    if mode == 'binary':
+        model = model_binary
+    else:
+        model = model_multi
+    
     model.eval()
     with torch.no_grad():
         output = model(input_tensor)
         pred = torch.argmax(output.squeeze(), dim=0).cpu().numpy()  # Shape: [H, W]
 
     # Convert prediction to image
-    pred_img = Image.fromarray((pred * 85).astype(np.uint8))  # Adjust 85 if you have more/less classes
-    pred_img = pred_img.resize(image.size)  
+    # Create color segmentation map
+    h, w = pred.shape
+    pred_img = np.zeros((h, w, 3), dtype=np.uint8)
+
+    for class_idx, color in class_colors.items():
+        pred_img[pred == class_idx] = color
+
+    # Convert to PIL and resize
+    pred_img = Image.fromarray(pred_img)
+    pred_img = pred_img.resize(image.size)
 
     # Encode to base64
     buffer = io.BytesIO()

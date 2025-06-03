@@ -12,7 +12,8 @@ import SegmentAPI from "../../apis/SegmentAPI";
 import { supabase } from "../../supabase/supabase.ts";
 import { PUBLIC_URL } from "../../supabase/bucket_url.ts";
 import Hero from "@/custom_components/hero.tsx";
-import { useAuth } from "@/custom_components/auth_context.tsx";
+import { Select } from "@radix-ui/react-select";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";import { useAuth } from "@/custom_components/auth_context.tsx";
 import { decode } from "base64-arraybuffer";
 import clsx from "clsx";
 import showErrorToaster from "@/custom_components/error-toaster.tsx";
@@ -195,7 +196,8 @@ export default function Home() {
     try {
       setIsProcessing(true);
       const formData = new FormData();
-      formData.append("image", selectedImage);
+      formData.append('image', selectedImage);
+      formData.append('mode',mode);
 
       const res = await SegmentAPI.segment(formData);
       const data = res.data as segmentResponse;
@@ -350,6 +352,15 @@ export default function Home() {
                     <Trash2 className="h-4 w-4 mr-2" />
                     Clear
                   </Button>
+                  <Select value={mode} onValueChange={setMode}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select mode" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="binary">Binary</SelectItem>
+                      <SelectItem value="multiclass">Multiclass</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <Button
                     size="sm"
                     onClick={processImage}
