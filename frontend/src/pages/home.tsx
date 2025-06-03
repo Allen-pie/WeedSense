@@ -15,6 +15,7 @@ import Hero from "@/custom_components/hero.tsx";
 import { useAuth } from "@/custom_components/auth_context.tsx";
 import { decode } from "base64-arraybuffer";
 import clsx from "clsx";
+import showErrorToaster from "@/custom_components/error-toaster.tsx";
 
 interface segmentResponse {
   message: string;
@@ -90,7 +91,7 @@ export default function Home() {
     const onMouseEnter = () => setIsPaused(true);
     const onMouseLeave = () => setIsPaused(false);
 
-    const carousel = emblaRef.current;
+    const carousel = (emblaRef as any).current;
     if (carousel) {
       carousel.addEventListener("mouseenter", onMouseEnter);
       carousel.addEventListener("mouseleave", onMouseLeave);
@@ -109,9 +110,16 @@ export default function Home() {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      // console.log("file", file);
-      setSelectedImage(file);
-      setSegmentedImage(null);
+       if (file.type === "image/jpeg" || file.type === "image/png") {
+        setSelectedImage(file);
+        setSegmentedImage(null);
+      }else {
+        showErrorToaster({
+          title : 'Invalid file type. Only JPG and PNG are allowed.'
+        })
+        return;
+      }
+
     }
   };
 
@@ -280,6 +288,14 @@ export default function Home() {
       .from(folder)
       .download(filename);
 
+    if (error){   
+      showErrorToaster({
+        title : 'Error downloading image',
+        description : error.message
+      })
+      return;
+    }
+
     if (data) {
       const url = URL.createObjectURL(data);
       const a = document.createElement("a");
@@ -287,7 +303,7 @@ export default function Home() {
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
-    }
+    } 
 
   };
   const [hasFetched, setHasFetched] = useState<boolean>(false);
@@ -371,7 +387,7 @@ export default function Home() {
                       <label>
                         <input
                           type="file"
-                          accept="image/*"
+                          accept="image/jpeg,image/png"
                           className="hidden"
                           onChange={handleImageUpload}
                         />

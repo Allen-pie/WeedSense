@@ -86,7 +86,7 @@ export default function Login() {
             {/* glow */}
             {/* <div className="absolute -inset-0.5 bg-green-500/20 rounded-xl blur-md"></div> */}
 
-            {/*  border-green-900 */}
+          
             <div className="relative  rounded-xl border overflow-hidden p-6 py-10 px-7 border-outline">
               <div className="text-center mb-8">
                 {/* <div className="inline-flex items-center justify-center mb-4">
@@ -126,12 +126,6 @@ export default function Login() {
                     <Label htmlFor="password" className="text-foreground">
                       Password
                     </Label>
-                    {/* <a
-                      href="/forgot-password"
-                      className="text-sm text-green-400 hover:text-green-300"
-                    >
-                      Forgot password?
-                    </a> */}
                   </div>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
