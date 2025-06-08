@@ -1,13 +1,13 @@
 from flask import Flask, request
 from flask_cors import CORS
-from inference import single_image_segment
 from werkzeug.utils import secure_filename
 import uuid
 import torchvision
 import os
 import io
 import base64
-from multi import segment_multi
+from binary_inference import single_image_segment
+from multiclass_inference import segment_multi
 
 
 app = Flask(__name__)

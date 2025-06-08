@@ -33,16 +33,20 @@ if __name__ == "__main__":
         train_imgs, val_imgs, train_masks, val_masks = pickle.load(f)
 
     LEARNING_RATE = 3e-4
-    BATCH_SIZE = 5  
-    EPOCHS = 20
+    EPOCHS = 30
     MODEL_SAVE_PATH = "../saved/best_model_binary.pth"
-    SIZE = (512, 896)
+     
+    # BATCH_SIZE = 5 
+    # IMG_SIZE = (512, 896)
+
+    BATCH_SIZE = 20 
+    IMG_SIZE = (256, 256)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
    
-    train_dataset = CropWeedDataset(train_imgs, train_masks, SIZE)
-    val_dataset = CropWeedDataset(val_imgs, val_masks, SIZE)
+    train_dataset = CropWeedDataset(train_imgs, train_masks, IMG_SIZE)
+    val_dataset = CropWeedDataset(val_imgs, val_masks, IMG_SIZE)
 
     train_dataloader = DataLoader(dataset=train_dataset,
                                 batch_size=BATCH_SIZE,
