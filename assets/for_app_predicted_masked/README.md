@@ -1,0 +1,1 @@
+# Folder ini digunakan sebagai tempat penyimpanan hasil segmentasi / prediksi manual melalui file inference.py

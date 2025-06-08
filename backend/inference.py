@@ -3,17 +3,11 @@ import pickle
 import matplotlib.pyplot as plt
 from torchvision import transforms
 from PIL import Image
-from cropweed_dataset import CropWeedDataset
 from unet import UNet
 import torchvision
 import os
-import torch.nn.functional as F
 
-SAVE_DIR = './assets/for_app_predicted_masked'
-
-
-# with open("./assets/split_paths.pkl", "rb") as f:
-#         train_imgs, val_imgs, train_masks, val_masks = pickle.load(f)
+SAVE_DIR = '../assets/for_app_predicted_masked'
 
 def single_image_segment(image_pth, img_res):
     model_pth = '../saved/best_model_binary.pth'
@@ -94,8 +88,8 @@ def single_image_inference(image_pth, model_pth, img_res, device):
 
 
 if __name__ == "__main__":
-    SINGLE_IMG_PATH = "./assets/for_app_original/ave-0035-0014.jpg"
-    MODEL_PATH = "./saved/unet.pth"
+    SINGLE_IMG_PATH = "../assets/for_app_original/ave-0035-0014.jpg"
+    MODEL_PATH = "../saved/best_model_binary.pth"
     IMG_RES = (512, 896)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
