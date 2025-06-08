@@ -2,8 +2,8 @@ import os
 from sklearn.model_selection import train_test_split
 import pickle
 
-image_dir = "assets/original"
-mask_dir = "assets/masked"
+image_dir = "../assets/original"
+mask_dir = "../assets/masked"
 
 image_filenames = sorted(os.listdir(image_dir))  # Sort to match images & masks
 mask_filenames = sorted(os.listdir(mask_dir))
